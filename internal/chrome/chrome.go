@@ -2,16 +2,16 @@ package chrome
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/abh1nav/chrome-enable-autoupdates/internal"
 	"github.com/abh1nav/chrome-enable-autoupdates/internal/plist"
+	"github.com/abh1nav/chrome-enable-autoupdates/internal/system"
 )
 
 // Makes sure the `Google Chrome.app` exists at the expected location.
 func EnsureInstalled() error {
-	if _, err := os.Stat(internal.ChromePath); os.IsNotExist(err) {
-		return fmt.Errorf("Chrome is not installed on this computer")
+	if !system.Exists(internal.ChromePath) {
+		return fmt.Errorf("Chrome not found at %s", internal.ChromePath)
 	}
 	return nil
 }

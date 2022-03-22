@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/abh1nav/chrome-enable-autoupdates/internal/checks"
 	"github.com/abh1nav/chrome-enable-autoupdates/internal/chrome"
 	"github.com/abh1nav/chrome-enable-autoupdates/internal/keystone"
+	"github.com/abh1nav/chrome-enable-autoupdates/internal/system"
 )
 
 func throw(err error) {
@@ -16,7 +16,7 @@ func throw(err error) {
 
 func main() {
 	// Make sure the process is being run as root
-	err := checks.EnsureRoot()
+	err := system.EnsureRoot()
 	if err != nil {
 		throw(err)
 	}
@@ -52,4 +52,14 @@ func main() {
 		throw(err)
 	}
 	fmt.Printf("Keystone Registration Framework is %s\n", keystoneRegistrationFramework)
+
+	err = keystone.Install()
+	if err != nil {
+		throw(err)
+	}
+
+	err = chrome.RegisterWithKeystone()
+	if err != nil {
+		throw(err)
+	}
 }

@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/abh1nav/chrome-enable-autoupdates/internal/checks"
+	"github.com/abh1nav/chrome-enable-autoupdates/internal/chrome"
+	"github.com/abh1nav/chrome-enable-autoupdates/internal/keystone"
 )
 
 func throw(err error) {
@@ -21,27 +23,33 @@ func main() {
 	fmt.Println("Command running as root")
 
 	// Ensure Chrome is installed
-	err = checks.EnsureChromeInstalled()
+	err = chrome.EnsureInstalled()
 	if err != nil {
 		throw(err)
 	}
 	fmt.Println("Chrome is installed")
 
-	chromeVersion, err := checks.ChromeVersion()
+	chromeVersion, err := chrome.InstalledVersion()
 	if err != nil {
-		throw((err))
+		throw(err)
 	}
 	fmt.Printf("Chrome version is %s\n", chromeVersion)
 
-	chromeUpdateURL, err := checks.ChromeUpdateURL()
+	chromeUpdateURL, err := chrome.UpdateURL()
 	if err != nil {
-		throw((err))
+		throw(err)
 	}
 	fmt.Printf("Chrome update URL is %s\n", chromeUpdateURL)
 
-	chromeProductID, err := checks.ChromeProductID()
+	chromeProductID, err := chrome.ProductID()
 	if err != nil {
-		throw((err))
+		throw(err)
 	}
 	fmt.Printf("Chrome product ID is %s\n", chromeProductID)
+
+	keystoneRegistrationFramework, err := keystone.RegistrationFrameworkPath()
+	if err != nil {
+		throw(err)
+	}
+	fmt.Printf("Keystone Registration Framework is %s\n", keystoneRegistrationFramework)
 }

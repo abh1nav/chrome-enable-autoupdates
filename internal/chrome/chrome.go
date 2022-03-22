@@ -1,4 +1,4 @@
-package checks
+package chrome
 
 import (
 	"fmt"
@@ -9,26 +9,15 @@ import (
 )
 
 // Makes sure the `Google Chrome.app` exists at the expected location.
-func EnsureChromeInstalled() error {
+func EnsureInstalled() error {
 	if _, err := os.Stat(internal.ChromePath); os.IsNotExist(err) {
 		return fmt.Errorf("Chrome is not installed on this computer")
 	}
 	return nil
 }
 
-// ChromeVersion reads the Info.plist and returns the value for CFBundleShortVersionString
-// i.e. the installed version of Chrome.
-func ChromeVersion() (string, error) {
-	version, err := plist.ReadPlistString(internal.ChromeInfoPlistPath,
-		"CFBundleShortVersionString")
-	if err != nil {
-		return "", fmt.Errorf("Could not get Chrome version because %s", err.Error())
-	}
-	return version, nil
-}
-
-// ChromeUpdateURL reads the Info.plist and returns the value for KSUpdateURL
-func ChromeUpdateURL() (string, error) {
+// UpdateURL reads the Info.plist and returns the value for KSUpdateURL
+func UpdateURL() (string, error) {
 	updateURL, err := plist.ReadPlistString(internal.ChromeInfoPlistPath,
 		"KSUpdateURL")
 	if err != nil {
@@ -37,8 +26,8 @@ func ChromeUpdateURL() (string, error) {
 	return updateURL, nil
 }
 
-// ChromeProductID reads the Info.plist and returns the value for KSProductID
-func ChromeProductID() (string, error) {
+// ProductID reads the Info.plist and returns the value for KSProductID
+func ProductID() (string, error) {
 	productID, err := plist.ReadPlistString(internal.ChromeInfoPlistPath,
 		"KSProductID")
 	if err != nil {

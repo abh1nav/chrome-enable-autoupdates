@@ -8,18 +8,12 @@ import (
 	"strconv"
 	"strings"
 
-	"howett.net/plist"
+	"github.com/abh1nav/chrome-enable-autoupdates/internal/plist"
 )
 
 const CHROME_PATH = "/Applications/Google Chrome.app"
 
 var CHROME_INFO_PLIST_PATH = path.Join(CHROME_PATH, "Contents/Info.plist")
-
-type ChromeInfoPList struct {
-	ShortVersion string `plist:"CFBundleShortVersionString"`
-	UpdateURL    string `plist:"KSUpdateURL"`
-	ProductID    string `plist:"KSProductID"`
-}
 
 func ensureRoot() {
 	stdout, err := exec.Command("ps", "-o", "user=", "-p", strconv.Itoa(os.Getpid())).Output()
@@ -43,31 +37,13 @@ func ensureChromeInstalled() {
 	}
 }
 
-func parseInfoPList() (ChromeInfoPList, error) {
-	fmt.Println("Reading plist", CHROME_INFO_PLIST_PATH)
-	var p ChromeInfoPList
-	f, err := os.Open(CHROME_INFO_PLIST_PATH)
-	if err != nil {
-		return p, err
-	}
-	defer f.Close()
-	var i interface{}
-	err = plist.NewDecoder(f).Decode(i)
-	if err != nil {
-		fmt.Printf("Failed to read plist: %s\n", err.Error())
-		return p, err
-	}
-	fmt.Printf("plist is %+v\n", i)
-	return p, err
-}
-
 func getChromeVersion() string {
-	pList, err := parseInfoPList()
+	version, err := plist.ReadPlistString(CHROME_INFO_PLIST_PATH, "CFBundleShortVersionString")
 	if err != nil {
 		fmt.Printf("Error: failed to open Chrome info plist %s because: %s", CHROME_INFO_PLIST_PATH, err.Error())
 		os.Exit(1)
 	}
-	return pList.ShortVersion
+	return version
 }
 
 func main() {

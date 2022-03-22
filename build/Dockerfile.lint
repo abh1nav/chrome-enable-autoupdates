@@ -1,0 +1,7 @@
+FROM golangci/golangci-lint:v1.43.0-alpine
+
+WORKDIR /go/src/app
+
+ADD . /go/src/app
+
+CMD ["golangci-lint", "run"]

@@ -7,5 +7,5 @@ import (
 // Exists tells you whether a filepath exists.
 func Exists(path string) bool {
 	_, err := os.Stat(path)
-	return !os.IsNotExist(err)
+	return err != nil
 }

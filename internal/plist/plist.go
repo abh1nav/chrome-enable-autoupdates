@@ -46,6 +46,7 @@ func parseValue(line string) (string, error) {
 	if !strings.Contains(line, "<string>") {
 		return "", errors.New("Value is not a string")
 	}
+
 	split1 := strings.Split(line, "<string>")
 	if len(split1) != 2 {
 		return "", fmt.Errorf("Malformed value from plist: %s", line)

@@ -9,13 +9,13 @@ install:
 	@GO111MODULE=on go mod vendor
 
 run:
-	@go run -mod=vendor -ldflags "-X main.version=$(VERSION)" cmd/$(APP)/main.go
+	@GO111MODULE=on go run -mod=vendor -ldflags "-X main.version=$(VERSION)" cmd/$(APP)/main.go
 
 clean:
 	@rm -Rf dist
 
 build:
-	@go build -mod=vendor -o dist/$(APP)-$(VERSION)-arm64 -ldflags "-X main.version=$(VERSION)" cmd/$(APP)/main.go
+	@GO111MODULE=on GOOS=darwin GOARCH=arm64 go build -mod=vendor -o dist/$(APP)-$(VERSION)-darwin-arm64 -ldflags "-X main.version=$(VERSION)" cmd/$(APP)/main.go
 
 lint:
 	@DOCKER_BUILDKIT=1 docker build -f build/Dockerfile.lint -t $(APP)-$(VERSION)-lint .

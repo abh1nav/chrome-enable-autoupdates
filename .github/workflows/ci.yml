@@ -39,5 +39,5 @@ jobs:
       - name: Publish
         uses: actions/upload-artifact@v3
         with:
-          name: my-artifact
+          name: chrome-enable-autoupdates-darwin-arm64
           path: dist/*
